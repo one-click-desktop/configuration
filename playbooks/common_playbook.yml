@@ -19,3 +19,10 @@
         name: 
           - git
         state: present
+
+  - name: Enable and start docker service
+    become: true
+    ansible.builtin.systemd:
+      name: docker
+      state: started
+      enabled: yes
