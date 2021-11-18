@@ -14,8 +14,6 @@
   - name: Clone Overseer module
     ansible.builtin.git:
       repo: https://github.com/one-click-desktop/overseer
-      dest: /opt/one-click-desktop
+      dest: /opt/one-click-desktop/overseer
 
 #- name: Build docker container
-
-#- name: Create systemd service for
