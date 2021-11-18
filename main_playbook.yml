@@ -1,0 +1,10 @@
+---
+
+# Main playbook for every module 
+# Remeber to upgrade your arch before using this playbook!!!
+# New packages will be installed
+# TODO: add optional flag to upgrade
+
+- import_playbook: playbooks/common_playbook.yml
+- import_playbook: playbooks/overseer/main_playbook_overseer.yml
+- import_playbook: playbooks/virtsrv/main_playbook_virtsrv.yml

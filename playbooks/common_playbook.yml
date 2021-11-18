@@ -1,0 +1,15 @@
+---
+#Remeber to upgrade your arch before using this playbook!!!
+
+- hosts: all
+  tasks:
+  - name: Install packages
+    become: true
+    block:
+    - name: Install Docker
+      community.general.pacman:
+        name: 
+          - docker
+          - docker-compose
+        state: present
+        update_cache: yes

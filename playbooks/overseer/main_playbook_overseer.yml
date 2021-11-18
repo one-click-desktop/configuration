@@ -1,0 +1,8 @@
+---
+- name: Create directory for application
+  
+- name: Clone Overseer module
+
+#- name: Build docker container
+
+#- name: Create systemd service for
