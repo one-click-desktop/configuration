@@ -1,5 +1,5 @@
----
-#Remeber to upgrade your arch before using this playbook!!!
+--- 
+# Remeber to upgrade your arch before using this playbook!!!
 
 - hosts: all
   tasks:
@@ -13,3 +13,9 @@
           - docker-compose
         state: present
         update_cache: yes
+
+    - name: Install git
+      community.general.pacman:
+        name: 
+          - git
+        state: present
