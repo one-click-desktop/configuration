@@ -1,0 +1,6 @@
+---
+
+- hosts: virtsrv
+  tasks:
+  - debug:
+      msg: hello world

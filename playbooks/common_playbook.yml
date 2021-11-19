@@ -1,0 +1,28 @@
+--- 
+# Remeber to upgrade your arch before using this playbook!!!
+
+- hosts: all
+  tasks:
+  - name: Install packages
+    become: true
+    block:
+    - name: Install Docker
+      community.general.pacman:
+        name: 
+          - docker
+          - docker-compose
+        state: present
+        update_cache: yes
+
+    - name: Install git
+      community.general.pacman:
+        name: 
+          - git
+        state: present
+
+  - name: Enable and start docker service
+    become: true
+    ansible.builtin.systemd:
+      name: docker
+      state: started
+      enabled: yes
