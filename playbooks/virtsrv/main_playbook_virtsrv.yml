@@ -1,5 +1,12 @@
 ---
 
+# pakiety: qemu libvirt vagrant bridge-utils ansible
+#akcje: 
+# - utworzenie bridge'a (nmcli)
+# - ustalenie domyslnego providera w vagrancie na libvirta
+# - aktywacja libvirtd oraz jego wlaczenie
+# - dodac uzytkownikow do grupy libvirt
+
 - hosts: virtsrv
   tasks:
   - debug:
