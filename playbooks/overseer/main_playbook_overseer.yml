@@ -7,8 +7,8 @@
     ansible.builtin.file:
       path: /opt/one-click-desktop
       state: directory
-      owner: '{{ ansible_user }}'
-      group: '{{ ansible_user }}'
+      owner: '{{ executive_username }}'
+      group: '{{ executive_username }}'
       mode: '0755'
 
   - name: Clone Overseer module

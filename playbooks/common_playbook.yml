@@ -26,3 +26,11 @@
       name: docker
       state: started
       enabled: yes
+
+  - name: Creating executive user
+    become: true
+    ansible.builtin.user:
+      name: '{{ executive_username }}'
+      groups: docker
+      append: yes
+

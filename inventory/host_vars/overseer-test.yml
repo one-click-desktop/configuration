@@ -2,14 +2,14 @@
 
 #Please remeber to change access to remote host before configuration
 ansible_port: 22
-ansible_host: 10.0.9.90
+ansible_host: 10.0.9.91
 ansible_ssh_common_args: '-o IdentitiesOnly=yes -o StrictHostKeyChecking=no'
 
 ansible_user: ansible
 ansible_become_password: devel
 
 #private key method
-#ansible_ssh_private_key_file: path/to/private_key
+#ansible_ssh_private_key_file: ~/.ssh/id_rsa
 #Password method
 ansible_ssh_pass: devel
 #ansible_ssh_pass: p4ssw0rd
