@@ -30,7 +30,7 @@
   - name: Creating executive user
     become: true
     ansible.builtin.user:
-      name: '{{ executive_username }}'
+      name: '{{ executive_user }}'
       groups: docker
       append: yes
 

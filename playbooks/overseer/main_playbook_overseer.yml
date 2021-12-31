@@ -7,13 +7,22 @@
     ansible.builtin.file:
       path: /opt/one-click-desktop
       state: directory
-      owner: '{{ executive_username }}'
-      group: '{{ executive_username }}'
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
       mode: '0755'
 
   - name: Clone Overseer module
     ansible.builtin.git:
       repo: https://github.com/one-click-desktop/overseer
       dest: /opt/one-click-desktop/overseer
+
+  - name: Change owner of application
+    become: true
+    ansible.builtin.file:
+      path: /opt/one-click-desktop
+      state: directory
+      owner: '{{ executive_user }}'
+      group: '{{ executive_user }}'
+      recurse: yes
 
 #- name: Build docker container

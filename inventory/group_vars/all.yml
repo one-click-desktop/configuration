@@ -15,4 +15,4 @@
 
 # Executive user is user which will be holding permissions to application
 # and will be running application
-executive_username: ocdesk
+executive_user: ocdesk
