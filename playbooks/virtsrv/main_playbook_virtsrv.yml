@@ -28,7 +28,7 @@
       community.general.pacman:
         name: 
           - ansible
-          - bridge utils
+          - bridge-utils
         state: present
   
   - name: Configure bridge interface
@@ -36,19 +36,19 @@
     block:
     - name: Create bridge interface
       community.general.nmcli:
+        conn_name: bridge-{{ bridge_name }}
         type: bridge
         ifname: '{{ bridge_name }}'
         stp: no
+        state: present
 
     - name: Create bridge slave interface
       community.general.nmcli:
-        type: bridge
+        conn_name: bridge-slave-{{ bridge_slave_interface }}
+        type: bridge-slave
         ifname: '{{ bridge_slave_interface }}'
         master: '{{ bridge_name }}'
-
-    # it can crash network connection
-    - name: Swap interfaces
-      ansible.builtin.command: nmcli connection down '{{ slave_connection }}' && nmcli connection up bridge-'{{ bridge_name }}'
+        state: present
 
   - name: Enable and start libvirtd service
     become: true
@@ -60,7 +60,7 @@
   - name: Accept packets in UFW at bridged devices
     become: true
     ansible.builtin.lineinfile:
-      path: /env
+      path: /etc/ufw/before.rules
       line: '-I FORWARD -m physdev --physdev-is-bridged -j ACCEPT'
       insertbefore: 'COMMIT'
       state: present

@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: overseer
   tasks:
   - name: Create directory for application
     become: true
