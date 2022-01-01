@@ -65,20 +65,10 @@
       insertbefore: 'COMMIT'
       state: present
 
-  - name: Enable ufw
-    become: true
-    community.general.ufw:
-      state: enabled
-
-  - name: Reload ufw
-    become: true
-    community.general.ufw:
-      state: reloaded
-
   - name: Update executive user
     become: true
     ansible.builtin.user:
-      name: '{{ executive_username }}'
+      name: '{{ executive_user }}'
       groups: libvirt,kvm
       append: yes
 
