@@ -12,3 +12,7 @@
 #Password method
 #ansible_ssh_pass: devel
 #ansible_ssh_pass: p4ssw0rd
+
+# Executive user is user which will be holding permissions to application
+# and will be running application
+executive_user: ocdesk

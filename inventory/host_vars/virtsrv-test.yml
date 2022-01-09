@@ -9,7 +9,11 @@ ansible_user: ansible
 ansible_become_password: devel
 
 #private key method
-#ansible_ssh_private_key_file: path/to/private_key
+#ansible_ssh_private_key_file: ~/.ssh/id_rsa
 #Password method
 ansible_ssh_pass: devel
 #ansible_ssh_pass: p4ssw0rd
+
+bridge_name: br0
+bridge_slave_interface: enp2s0
+slave_connection: Wired\ connection\ 1

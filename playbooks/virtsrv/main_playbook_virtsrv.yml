@@ -1,6 +1,108 @@
 ---
 
+# pakiety: qemu libvirt vagrant bridge-utils ansible ebtables dnsmasq
+#akcje: 
+# - utworzenie bridge'a (nmcli)
+# - aktywacja libvirtd oraz jego wlaczenie
+# - ustalenie domyslnego providera w vagrancie na libvirta
+# - dodac uzytkownikow do grupy libvirt
+
 - hosts: virtsrv
   tasks:
-  - debug:
-      msg: hello world
+  - name: Install packages
+    become: true
+    block:
+
+    #Libvirt require some firewall provider - ufw is guaranteed to work
+    - name: Install virtualization tools
+      community.general.pacman:
+        name: 
+          - libvirt
+          - qemu
+          - vagrant
+          - dnsmasq
+          - ufw
+        state: present
+
+    - name: Install addtional tools
+      community.general.pacman:
+        name: 
+          - ansible
+          - bridge-utils
+        state: present
+
+    - name: Check if vagrant-libvirt is already installed
+      ansible.builtin.command: vagrant plugin list | grep -i vagrant-libvirt
+      register: vagrant_libvirt_check
+
+    # Nie instalujemy pluginu z pacmana, poniewaz może tam byc stara wersja
+    # (arch może nie konieczine ale w debianie to jest problem)
+    # System był testowany i budowany na wersji 0.7.0
+    - name: Install vagrant-libvirt plugin
+      ansible.builtin.command: vagrant plugin install vagrant-libvirt
+      when: vagrant_libvirt_check == ""
+  
+  - name: Configure bridge interface
+    become: true
+    block:
+    - name: Create bridge interface
+      community.general.nmcli:
+        conn_name: bridge-{{ bridge_name }}
+        type: bridge
+        ifname: '{{ bridge_name }}'
+        stp: no
+        state: present
+
+    - name: Create bridge slave interface
+      community.general.nmcli:
+        conn_name: bridge-slave-{{ bridge_slave_interface }}
+        type: bridge-slave
+        ifname: '{{ bridge_slave_interface }}'
+        master: '{{ bridge_name }}'
+        state: present
+
+  - name: Enable and start libvirtd service
+    become: true
+    ansible.builtin.systemd:
+      name: libvirtd
+      state: started
+      enabled: yes
+
+  - name: Accept packets in UFW at bridged devices
+    become: true
+    ansible.builtin.lineinfile:
+      path: /etc/ufw/before.rules
+      line: '-I FORWARD -m physdev --physdev-is-bridged -j ACCEPT'
+      insertbefore: 'COMMIT'
+      state: present
+
+  - name: Update executive user
+    become: true
+    ansible.builtin.user:
+      name: '{{ executive_user }}'
+      groups: libvirt,kvm
+      append: yes
+
+  - name: Create directory for application
+    become: true
+    ansible.builtin.file:
+      path: /opt/one-click-desktop
+      state: directory
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+      mode: '0755'
+
+  - name: Clone Virtualization server module
+    ansible.builtin.git:
+      repo: https://github.com/one-click-desktop/virtualization-server
+      dest: /opt/one-click-desktop/virtualization-server
+      track_submodules: yes
+
+  - name: Change owner of application
+    become: true
+    ansible.builtin.file:
+      path: /opt/one-click-desktop
+      state: directory
+      owner: '{{ executive_user }}'
+      group: '{{ executive_user }}'
+      recurse: yes
