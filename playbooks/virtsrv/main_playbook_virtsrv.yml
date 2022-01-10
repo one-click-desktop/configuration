@@ -31,17 +31,17 @@
           - bridge-utils
         state: present
 
-    - name: Check if vagrant-libvirt is already installed
-      ansible.builtin.command: vagrant plugin list | grep -i vagrant-libvirt
-      register: vagrant_libvirt_check
+  - name: Check if vagrant-libvirt is already installed
+    ansible.builtin.shell: vagrant plugin list
+    register: vagrant_libvirt_check
 
-    # Nie instalujemy pluginu z pacmana, poniewaz może tam byc stara wersja
-    # (arch może nie konieczine ale w debianie to jest problem)
-    # System był testowany i budowany na wersji 0.7.0
-    - name: Install vagrant-libvirt plugin
-      ansible.builtin.command: vagrant plugin install vagrant-libvirt
-      when: vagrant_libvirt_check == ""
-  
+  # Nie instalujemy pluginu z pacmana, poniewaz może tam byc stara wersja
+  # (arch może nie konieczine ale w debianie to jest problem)
+  # System był testowany i budowany na wersji 0.7.0
+  - name: Install vagrant-libvirt plugin
+    ansible.builtin.command: vagrant plugin install vagrant-libvirt  
+    when: '"vagrant-libvirt" not in vagrant_libvirt_check'
+
   - name: Configure bridge interface
     become: true
     block:
@@ -90,7 +90,7 @@
       state: directory
       owner: '{{ ansible_user }}'
       group: '{{ ansible_user }}'
-      mode: '0755'
+      recurse: yes
 
   - name: Clone Virtualization server module
     ansible.builtin.git:
