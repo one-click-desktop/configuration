@@ -1,6 +1,6 @@
 # Configurations for OneClickDesktop
 
-This repository contains ansible playbooks examples to help configure systems before deployment of the system.
+This repository contains ansible playbooks examples to help configure modules before deployment of the system.
 Basically it describes all dependencies for machines running Virtualization Server and Overseer applications.
 Before any actions please read this instruction.
 
@@ -24,8 +24,8 @@ Table of content:
 
 # Requirements for playbooks
 
-All playbooks was written for Arch Linux based machines.
-Machine to configuration must have internet connection and ssh connection for user with superuser privileges.
+All playbooks were written for Arch Linux based machines.
+Configured machines must have internet connection and SSH access for user with superuser privileges.
 
 For other systems feel free to correct playbooks for your system with instructions written below.
 
@@ -33,9 +33,9 @@ For other systems feel free to correct playbooks for your system with instructio
 
 Configuration scripts can be found in folder [playbooks](playbooks). There should be common, virtsrv and Overseer configuration playbooks.
 They can be run by scripts from [scripts](scripts) directories.
-But before any actions check the [inventory](inventory) directory, which contains access information to machines.
+But before any actions check the [inventory](inventory) directory, which contains information about access to machines.
 
-Also feel free to extend this structures about new groups and machines. It is only a simple example of systems contains from 2 types of machines. But some steps in playbooks are important and are described below.
+Also feel free to extend these structures with new groups and machines. It is only a simple example of systems containing 2 types of machines. But some steps in playbooks are important and are described below.
 
 # Common configuration
 Defined in file [common_playbook.yml](playbooks/common_playbook.yml).
@@ -93,10 +93,10 @@ Virtualization server requires a lot of additional services running at machine. 
 
 ## Packages
 
-All Virtualization Server running cable machines must have installed packages:
+All Virtualization Server running machines must have installed packages:
 1. `qemu` virtualization driver.
 2. `libvirt` with libvirt daemon to overwise qemu/kvm virtual machines.
-3. `vagrant` with `vagrant-libvirt` plugin to crate replicable machines (`vagrant-libvirt` plugin version should be at least 0.7.0 - use `vagrant plugin install` for installation).
+3. `vagrant` with `vagrant-libvirt` plugin to create replicable machines (`vagrant-libvirt` plugin version should be at least 0.7.0 - use `vagrant plugin install` for installation).
 4. `dnsmasq` for mapping virtual machines network
 5. Some firewall software to isolate virtual machines network (`ufw` is preferred - system was tested with it).
 6. `ansible` to configure virtual machines after startup.
@@ -121,7 +121,7 @@ Configuration network is created by vagrant to correctly start virtual machine.
 Access network is for rdp connection and is realized by bridge device passed to virtual machine.
 
 Because of docker and vagrant firewall configuration virtual machines are blocked at access network.
-At this situation started machines typically doesn't acquire address from DHCP at bridge connected interface.
+In this case started machines typically can't acquire address from DHCP at bridge connected interface.
 To resolve this problem firewall should be configured to pass every packets from bridged devices.
 Simply add this rule on top of iptables FORWARD chain:
 ```
