@@ -24,7 +24,7 @@ Defined in file [common_playbook.yml](playbooks/common_playbook.yml).
 
 ## Important steps
 
-All overseers and virtual server capable machines must have:
+All overseers and virtualization server capable machines must have:
 1. `docker` and `docker-compose` installed to run applications.
 2. `git` installed to clone code from which containers can be build.
 3. Enabled and started docker service.
@@ -37,7 +37,40 @@ This group has configuration [file](inventory/group_vars/all.yml), which contain
 executive_user: ocdesk
 ```
 
+## Common variables for every virtualization server and overseer
+
+To conenct with machine ansible has to know what address and what credentials should be used to communicate. In both groups we define variables:
+
+```
+ansible_port: 22
+ansible_host: 10.20.30.40
+ansible_user: ansible
+ansible_ssh_private_key_file: path/to/private/ssh/key
+ansible_ssh_pass: password_ssh
+ansible_become_password: password_become
+```
+
+More informations about ssh credetials can be found at ansible [documentation](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html). For configuration important is `ansible_become_password` becouse of root privileged actions.
+
 # Overser configuration
+Defined in file [main_playbook_overseer.yml](playbooks/overseer/main_playbook_overseer.yml).
+
+## Important steps
+
+All Overseer capable machine must have:
+1. Cloned [overseer repository](https://github.com/one-click-desktop/overseer) to folder owned by `executive_user`.
+
+How to build and run Overseer application is described at [overseer repository's](https://github.com/one-click-desktop/overseer) README.
+
+Overseer doesn't need any special services running at configured system.
+
+## Important variables
+
+All important variables all defined at [common variables section](#common-variables-for-every-virtualization-server-and-overseer)
 
 # Virtualization Server configuration
+Defined in file [main_playbook_virtsrv.yml](playbooks/virtsrv/main_playbook_virtsrv.yml).
 
+## Important steps
+
+## Important variables
