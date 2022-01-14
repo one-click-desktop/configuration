@@ -64,13 +64,76 @@ How to build and run Overseer application is described at [overseer repository's
 
 Overseer doesn't need any special services running at configured system.
 
-## Important variables
+## Important overseer variables
 
 All important variables all defined at [common variables section](#common-variables-for-every-virtualization-server-and-overseer)
 
 # Virtualization Server configuration
 Defined in file [main_playbook_virtsrv.yml](playbooks/virtsrv/main_playbook_virtsrv.yml).
 
-## Important steps
+Virtualization server requires a lot of additional services running at machine. After
 
-## Important variables
+## Packages
+
+All virtualization server cable machines must have installed packages:
+1. `qemu` virtualization driver.
+2. `libvirt` with libvirt daemon to hypervise qemu/kvm virtual machines.
+3. `vagrant` with `vagrant-libvirt` plugin to crate replicable machines (`vagrant-libvirt` plugin version should be at least 0.7.0 - use `bagrant plugin install` for instalation).
+4. `dnsmasq` for mapping virtual machines network
+5. Some firewall software to isolate virtual machines network (`ufw` is preffered - system was tested with it).
+6. `ansible` to configure virtual machines after stratup.
+7. `bridge-utils` for virtual machines networking configurations.
+
+## Bridge interface
+To correctly start virtual machine as a part of the system it must have bridge interface attachech. This bridge device have to connect those virtual machines with network used to communicate with clients.
+
+Bridge can be made for many diffrent ways. Firstly we have to choose one physical network interface as a bridge interface. Then create bridge device with this interface attached to it.
+
+In playbook bridge is configured with `network-manager`. To correctly run script user have to define(variable names defined at [variables](#important-virtualizatoin-server-variables)):
+1. Name of chosen physical interface (eg. eth1)
+2. Connection paired with physical interface
+3. Name of createad bridge device.
+
+After running script slave device has to be disabled and bridge connection has to be enabled by user.
+
+## Firewall configuration
+
+Virtual machines running as a part of the system are connected to 2 networks: configuration and access.
+Configuration netwrk is created by vagrant to correctly start virtual machine.
+Access network is for rdp connection and is realized by bridge device passed to virtual machine.
+
+Because of docker and vagrant firewall configuration virtual machines are blocked at access network.
+At this situation started machines typicaly doesn't aqcuire address from DHCP at bridge connected interface.
+To resolve this problem firewall should be configured to pass every packets from bridged devices.
+Simply add this rule on top of iptables FORWARD chain:
+```
+-I FORWARD -m physdev --physdev-is-bridged -j ACCEPT
+```
+
+## Application and services
+
+Before running application `libvirtd` service should be enabled and started.
+In addition `executive_user` should be part of `libvirt` and `kvm` group.
+Also make sure, that `executive_user` has in his home folder `.vagrant.d` where system will be storing template images of vagrant boxes.
+
+At the end application should be cloned to folder owned by `executive_user`.
+
+How to build and run Virtualization Server application is described at [virtualization-server repository's](https://github.com/one-click-desktop/overseer) README.
+
+Virtualization server requires `libvirtd` service running at system to operate correctly.
+
+
+## Important virtualizatoin server variables
+
+In addition to [common variables](#common-variables-for-every-virtualization-server-and-overseer) virtualization server playbook requires inforamtions about bridge connections.
+User must declare:
+1. `bridge_name` - name of bridge device to create
+2. `bridge_slave_interface` - interface name of physical interface to bridge
+3. `slave_connection` - name of Networkmanager connection associated with bridging device declared at `bridge_slave_interface`.
+
+For eg.
+```
+bridge_name: br0
+bridge_slave_interface: enp2s0
+slave_connection: Wired\ connection\ 1
+```
