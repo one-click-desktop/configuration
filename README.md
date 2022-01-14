@@ -117,7 +117,7 @@ After running script slave device has to be disabled and bridge connection has t
 ## Firewall configuration
 
 Virtual machines running as a part of the system are connected to 2 networks: configuration and access.
-Configuration netwrk is created by vagrant to correctly start virtual machine.
+Configuration network is created by vagrant to correctly start virtual machine.
 Access network is for rdp connection and is realized by bridge device passed to virtual machine.
 
 Because of docker and vagrant firewall configuration virtual machines are blocked at access network.
