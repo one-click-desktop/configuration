@@ -136,7 +136,7 @@ Also make sure, that `executive_user` has in his home folder `.vagrant.d` where 
 
 At the end application should be cloned to folder owned by `executive_user`.
 
-How to build and run Virtualization Server application is described at [virtualization-server repository's](https://github.com/one-click-desktop/overseer) README.
+How to build and run Virtualization Server application is described at [virtualization-server repository's](https://github.com/one-click-desktop/virtualization-server) README.
 
 Virtualization server requires `libvirtd` service running at system to operate correctly.
 
