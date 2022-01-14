@@ -50,14 +50,14 @@ All Overseers and Virtualization server capable machines must have:
 
 ## Important variables
 
-This group has configuration [file](inventory/group_vars/all.yml), which contains user who will run the whole system. By default it's named `ocdesk` and is arbitraly chosen.
+This group has configuration [file](inventory/group_vars/all.yml), which contains user who will run the whole system. By default it's named `ocdesk` and is arbitrarily chosen.
 ```
 executive_user: ocdesk
 ```
 
 ## Common variables for every Virtualization Server and Overseer
 
-To conenct with machine ansible has to know what address and what credentials should be used to communicate. In both groups we define variables:
+To connect with machine ansible has to know what address and what credentials should be used to communicate. In both groups we define variables:
 
 ```
 ansible_port: 22
@@ -68,7 +68,7 @@ ansible_ssh_pass: password_ssh
 ansible_become_password: password_become
 ```
 
-More informations about ssh credetials can be found at ansible [documentation](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html). For configuration important is `ansible_become_password` because of root privileged actions.
+More information about ssh credentials can be found at ansible [documentation](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html). For configuration important is `ansible_become_password` because of root privileged actions.
 
 # Overseer configuration
 Defined in file [main_playbook_overseer.yml](playbooks/overseer/main_playbook_overseer.yml).
