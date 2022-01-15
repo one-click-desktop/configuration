@@ -89,8 +89,6 @@ All important variables all defined at [common variables section](#common-variab
 # Virtualization Server configuration
 Defined in file [main_playbook_virtsrv.yml](playbooks/virtsrv/main_playbook_virtsrv.yml).
 
-Virtualization server requires a lot of additional services running at machine. After
-
 ## Packages
 
 All Virtualization Server running machines must have installed packages:
