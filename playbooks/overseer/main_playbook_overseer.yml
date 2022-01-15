@@ -9,7 +9,7 @@
       state: directory
       owner: '{{ ansible_user }}'
       group: '{{ ansible_user }}'
-      mode: '0755'
+      recurse: yes
 
   - name: Clone Overseer module
     ansible.builtin.git:
