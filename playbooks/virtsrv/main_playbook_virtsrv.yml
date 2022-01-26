@@ -22,6 +22,7 @@
           - vagrant
           - dnsmasq
           - ufw
+          - ovmf
         state: present
 
     - name: Install addtional tools
@@ -73,6 +74,14 @@
     ansible.builtin.lineinfile:
       path: /etc/ufw/before.rules
       line: '-I FORWARD -m physdev --physdev-is-bridged -j ACCEPT'
+      insertbefore: 'COMMIT'
+      state: present
+
+  - name: Accept packets in UFW from docker network to vagrant configuration network
+    become: true
+    ansible.builtin.lineinfile:
+      path: /etc/ufw/before.rules
+      line: '-I FORWARD -d 192.168.121.0/24 -s 172.0.0.0/8 -j ACCEPT'
       insertbefore: 'COMMIT'
       state: present
 
